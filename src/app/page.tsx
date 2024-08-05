@@ -1,11 +1,10 @@
 "use client";
 
-import { cleanUser } from "@/libs/cleanUser";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cleanUser } from "@/libs/cleanUser";
 import UserCard from "@/components/UserCard";
 import { UserCardProps } from "@/libs/types";
-import { useEffect } from "react";
 
 export default function RandomUserPage() {
   // annotate type for users state variable
@@ -26,27 +25,27 @@ export default function RandomUserPage() {
     //Your code here
     //Process result from api response with map function. Tips use function from /src/libs/cleanUser
     //Then update state with function : setUsers(...)
-    const cleanedUser = users.map(cleanUser);
-    setUsers(cleanedUser);
+    const cleanedUsers = users.map(cleanUser);
+    setUsers(cleanedUsers);
   };
 
-  useEffect(() => {
-    if (isFirstLoad) {
-      setIsFirstLoad(false);
-      return;
-    }
-    const jsonStr = JSON.stringify(genAmount);
-    localStorage.setItem("genAmount", jsonStr);
-  },[genAmount]);
+    useEffect(() => {
+      if (isFirstLoad) {
+        setIsFirstLoad(false);
+        return;
+      }
+      const jsonStr = JSON.stringify(genAmount);
+      localStorage.setItem("genAmount", jsonStr);
+    },[genAmount]);
 
-  useEffect(() => {
-    const jsonStr = localStorage.getItem("genAmount");
-    if (jsonStr !== null){
-      const newGenAmount = JSON.parse(jsonStr);
-      setGenAmount(newGenAmount);
-    }
-  },[]);
-
+    useEffect(() => {
+      const jsonStr = localStorage.getItem("genAmount");
+      if (jsonStr !== null){
+        const newGenAmount = JSON.parse(jsonStr);
+        setGenAmount(newGenAmount);
+      }
+    },[]);
+    
   return (
     <div style={{ maxWidth: "700px" }} className="mx-auto">
       <p className="display-4 text-center fst-italic m-4">Users Generator</p>
@@ -64,7 +63,7 @@ export default function RandomUserPage() {
         </button>
       </div>
       {isLoading && (
-        <p className="display-6 text-center fst-italic my-4"> Loading ... </p>
+        <p className="display-6 text-center fst-italic my-4">Loading ...</p>
       )}
       {users && !isLoading && users.map((user: UserCardProps) => (<UserCard key={user.email} {...user}/>))}
     </div>
